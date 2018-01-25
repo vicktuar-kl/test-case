@@ -20,7 +20,6 @@ public:
     explicit Inventory(uint size = 3, QWidget *parent = nullptr);
 
     uint size() const;
-    QTableWidget *invetoryBoard() const;
 
 signals:
 

@@ -22,10 +22,3 @@ void Inventory::createFormInterior() {
 uint Inventory::size() const {
     return m_Size;
 }
-
-
-QTableWidget *Inventory::invetoryBoard() const {
-    return m_InvetoryBoard;
-}
-
-

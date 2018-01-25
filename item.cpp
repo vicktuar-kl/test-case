@@ -11,11 +11,6 @@ Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/
     createFormInterior();
 }
 
-QLabel *Item::label() const
-{
-    return m_Label;
-}
-
 void Item::createFormInterior() {
     qDebug() << "Item";
 }

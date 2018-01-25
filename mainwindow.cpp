@@ -23,11 +23,11 @@ void MainWindow::createFormInterior() {
     QVBoxLayout *subVLayout = new QVBoxLayout;
 
     subVLayout->setMargin(15);
-    subVLayout->addWidget(m_Item->label());
+    subVLayout->addWidget(m_Item);
     subVLayout->addWidget(new QPushButton("PLACEHOLDER"));
 
     subHLayout->setMargin(15);
-    subHLayout->addWidget(m_Inventory->invetoryBoard());
+    subHLayout->addWidget(m_Inventory);
     subHLayout->addLayout(subVLayout);
 
     mainLayout->addWidget(m_MainMenu);

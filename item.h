@@ -17,7 +17,6 @@ public:
 
     QString picture() const;
     QString type() const;
-    QLabel *label() const;
 
 signals:
 
