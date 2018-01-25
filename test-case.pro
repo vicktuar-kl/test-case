@@ -25,7 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    inventory.cpp \
+    database.cpp \
+    item.cpp \
+    mainmenu.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    inventory.h \
+    database.h \
+    item.h \
+    mainmenu.h
+
+RESOURCES += \
+    resources.qrc

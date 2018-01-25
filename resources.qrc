@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+	    <file alias="apple.jpg">resources/apple.jpg</file>
+    </qresource>
+</RCC>
