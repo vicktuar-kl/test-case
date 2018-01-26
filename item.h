@@ -3,12 +3,11 @@
 #include <QWidget>
 #include <QLabel>
 
-class Item : public QWidget {
+class Item : public QLabel {
     Q_OBJECT
 private:
     QString m_Type;
     QString m_Picture;
-    QLabel *m_Label;
 
     void createFormInterior();
 
