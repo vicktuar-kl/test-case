@@ -7,11 +7,10 @@
 typedef unsigned int uint;
 typedef QMap<uint, QPair<Item*, uint>> cellContent;
 
-class Inventory : public QWidget {
+class Inventory : public QTableWidget {
     Q_OBJECT
 private:
     uint m_Size;
-    QTableWidget* m_InvetoryBoard;
     cellContent m_cellContent;
 
     void createFormInterior();

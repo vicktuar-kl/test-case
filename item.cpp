@@ -4,15 +4,18 @@
 #include "item.h"
 
 Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/)
-    : m_Type(type), m_Picture(picture), QWidget(parent) {
-    m_Label = new QLabel;
-    m_Label->setPixmap(QPixmap(m_Picture));
+    : m_Type(type), m_Picture(picture), QLabel(parent) {
 
     createFormInterior();
 }
 
 void Item::createFormInterior() {
     qDebug() << "Item";
+    QPixmap pixmap(m_Picture);
+    pixmap = pixmap.scaled(QSize(250, 250), Qt::KeepAspectRatio);
+    setPixmap(pixmap);
+    setMinimumSize(250, 250);
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
 QString Item::picture() const {
