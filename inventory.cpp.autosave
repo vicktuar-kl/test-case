@@ -48,7 +48,7 @@ void Inventory::createFormInterior() {
 }
 
 /*virtual*/ void Inventory::dropEvent(QDropEvent *event) /*override*/ {
-
+    
 }
 
 uint Inventory::size() const {

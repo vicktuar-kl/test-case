@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QWidget>
 #include <QTableWidget>
 #include "item.h"
 
@@ -14,6 +13,10 @@ private:
     cellContent m_cellContent;
 
     void createFormInterior();
+
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event) override;
+    virtual void dropEvent(QDropEvent *event);
 
 public:
     explicit Inventory(uint size = 3, QWidget *parent = nullptr);
