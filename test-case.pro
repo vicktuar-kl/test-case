@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,14 +29,18 @@ SOURCES += \
     inventory.cpp \
     database.cpp \
     item.cpp \
-    mainmenu.cpp
+    mainmenu.cpp \
+    widgetdrag.cpp \
+    widgetdmimedata.cpp
 
 HEADERS += \
         mainwindow.h \
     inventory.h \
     database.h \
     item.h \
-    mainmenu.h
+    mainmenu.h \
+    widgetdrag.h \
+    widgetmimedata.h
 
 RESOURCES += \
     resources.qrc

@@ -1,10 +1,11 @@
 #pragma once
 
-#include <QWidget>
 #include <QLabel>
+#include "database.h"
 
 class Item : public QLabel {
     Q_OBJECT
+
 private:
     QString m_Type;
     QString m_Picture;
@@ -16,8 +17,6 @@ private:
     void startDrag();
 
 protected:
-//    void dragEnterEvent(QDragEnterEvent *event) override;
-//    void dragMoveEvent(QDragMoveEvent *event) override;
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
 

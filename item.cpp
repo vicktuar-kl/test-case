@@ -1,14 +1,14 @@
 #include <QtWidgets>
+#include "widgetdrag.h"
 #include "item.h"
 
 Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/)
     : m_Type(type), m_Picture(picture), m_Pixmap(m_Picture), QLabel(parent) {
-
+	qDebug() << "Item create";
     createFormInterior();
 }
 
 void Item::createFormInterior() {
-    qDebug() << "Item";
     m_Pixmap.load(m_Picture);
     m_Pixmap = m_Pixmap.scaled(QSize(250, 250), Qt::KeepAspectRatio);
     setPixmap(m_Pixmap);
@@ -17,17 +17,10 @@ void Item::createFormInterior() {
 }
 
 void Item::startDrag() {
-    QMimeData * mimeData = new QMimeData;
-    QByteArray data;
-    QDataStream dataStream(&data, QIODevice::WriteOnly);
-
-    dataStream << m_Pixmap << m_Type << m_Picture;
-    mimeData->setData("application/x-item", data);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->setPixmap(m_Pixmap);
-    drag->exec(Qt::CopyAction);
+	Item* copyItem = new Item(m_Picture, m_Type);
+	WidgetDrag* drag = new WidgetDrag(copyItem);
+	drag->setWidget(copyItem);
+	drag->exec(Qt::CopyAction);
 }
 
 /*virtual*/ void Item::mousePressEvent(QMouseEvent *event) /*override*/ {
