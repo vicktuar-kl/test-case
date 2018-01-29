@@ -3,9 +3,8 @@
 #include "inventorycell.h"
 
 InventoryCell::InventoryCell(int row, int col, QWidget* parent /*= nullptr*/)
-	: QWidget(parent), m_Row(row), m_Col(col), m_Quantity(0), m_Content(new Item("", "")) {
+	: QWidget(parent), m_Row(row), m_Col(col), m_Quantity(0), m_Content(nullptr) {
 	setAcceptDrops(true);
-	createFormInterior();
 }
 
 void InventoryCell::createFormInterior() {
@@ -21,10 +20,13 @@ void InventoryCell::createFormInterior() {
 }
 
 void InventoryCell::startDrag() {
-	InventoryCell* draggedCell = new InventoryCell(m_Row, m_Col);
-	WidgetDrag* drag = new WidgetDrag(draggedCell);
-	drag->setWidget(draggedCell);
+//	InventoryCell* draggedCell = new InventoryCell(0, 0);
+//	draggedCell->setContent(new Item(m_Content->picture(), m_Content->type()));
+//	draggedCell->setQuantity(m_Quantity);
+	WidgetDrag* drag = new WidgetDrag(this);
+	drag->setWidget(this);
 	drag->exec();
+	updateLabel();
 }
 
 /*virtual*/ void InventoryCell::mouseMoveEvent(QMouseEvent *event) /*override*/ {
@@ -44,8 +46,10 @@ void InventoryCell::startDrag() {
 			m_Content->eat();
 			updateLabel();
 		}
-	} else if (event->button() == Qt::LeftButton)
+	} else if (event->button() == Qt::LeftButton) {
 		m_DragStart = event->pos();
+		qDebug() << "InventoryCell::mousePressEvent";
+	}
 
 	QWidget::mousePressEvent(event);
 }
@@ -60,24 +64,31 @@ void InventoryCell::dragEnterEvent(QDragEnterEvent* event) {
 void InventoryCell::dropEvent(QDropEvent* event) {
 	const WidgetMimeData* md =
 			dynamic_cast<const WidgetMimeData*>(event->mimeData());
-	if (md) {
-		emit droppedItem(m_Row, m_Col);
-		Item* tempItem = dynamic_cast<Item*>(md->widget());
-		if (tempItem) {
-			if (m_Quantity == 0) {
-				m_Content = tempItem;
-				m_Content->setToCopy(false);
-//				createFormInterior();
-			}
-			incQuantity();
-		} else {
-			InventoryCell* tempCell = dynamic_cast<InventoryCell*>(md->widget());
-			m_Content =	tempCell->content();
-			m_Quantity += tempCell->quantity();
-//			createFormInterior();
-		}
+	emit droppedItem(m_Row, m_Col);
+//	Item* tempItem = dynamic_cast<Item*>(md->widget());
+//	if (tempItem) {
+//		qDebug() << "tempItem address: " << tempItem;
+//		if (m_Quantity == 0) {
+//			m_Content = new Item(tempItem->picture(), tempItem->type());
+//			m_Content->setToCopy(false);
+////				createFormInterior();
+//			qDebug() << "m_Content address: " << m_Content;
+//		}
+//		incQuantity();
+//	} else {
+//		InventoryCell* tempCell = dynamic_cast<InventoryCell*>(md->widget());
+//		m_Content =	tempCell->content();
+//		m_Quantity += tempCell->quantity();
+////			createFormInterior();
+//	}
+	InventoryCell* temp = dynamic_cast<InventoryCell*>(md->widget());
+	if (isEmpty()) {
+		setContent(temp->content());
+		m_Content->setDragEnable(false);
+		createFormInterior();
 	}
-	QWidget::dropEvent(event);
+	m_Quantity += temp->quantity();
+	updateLabel();
 }
 
 void InventoryCell::updateLabel() {
@@ -100,4 +111,19 @@ void InventoryCell::decQuantity() {
 
 Item* InventoryCell::content() const {
 	return m_Content;
+}
+void InventoryCell::setQuantity(const uint& quantity) {
+	m_Quantity = quantity;
+}
+
+void InventoryCell::setContent(Item* content) {
+	m_Content = content;
+	m_Content->setPixmap(*content->pixmap());
+}
+
+bool InventoryCell::isEmpty() {
+	if (m_Content)
+		return false;
+	else
+		return true;
 }

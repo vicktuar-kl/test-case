@@ -32,6 +32,9 @@ public:
 	void incQuantity();
 	void decQuantity();
 	Item* content() const;
+	void setQuantity(const uint& Quantity);
+	void setContent(Item* Content);
+	bool isEmpty();
 
 signals:
 	void droppedItem(int row, int col);

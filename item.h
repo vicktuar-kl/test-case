@@ -16,7 +16,7 @@ private:
 	QMediaPlaylist* m_Playlist;
 
     QPoint m_DragStart;
-	bool m_ToCopy;
+	bool m_dragEnable;
 
     void createFormInterior();
 	void startDrag();
@@ -30,7 +30,7 @@ public:
 
     QString picture() const;
     QString type() const;
-	void setToCopy(bool ToCopy);
+	void setDragEnable(bool ToCopy);
 	void eat();
 
 signals:

@@ -1,9 +1,10 @@
 #include <QtWidgets>
 #include "widgetdrag.h"
 #include "item.h"
+#include "inventorycell.h"
 
 Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/)
-	: m_Type(type), m_Picture(picture), m_ToCopy(true), QLabel(parent) {
+	: m_Type(type), m_Picture(picture), m_dragEnable(true), QLabel(parent) {
 	qDebug() << "Create Item";
 	m_Player = new QMediaPlayer;
 	m_Playlist = new QMediaPlaylist(m_Player);
@@ -20,15 +21,19 @@ void Item::createFormInterior() {
 }
 
 void Item::startDrag() {
-	Item* draggedItem = new Item(m_Picture, m_Type);
+	InventoryCell* draggedItem = new InventoryCell(0, 0);
+	draggedItem->setContent(new Item(m_Picture, m_Type));
+	draggedItem->setQuantity(1);
 	WidgetDrag* drag = new WidgetDrag(draggedItem);
 	drag->setWidget(draggedItem);
 	drag->exec(Qt::MoveAction);
 }
 
 /*virtual*/ void Item::mousePressEvent(QMouseEvent *event) /*override*/ {
-    if (event->button() == Qt::LeftButton)
+	if (event->button() == Qt::LeftButton) {
         m_DragStart = event->pos();
+		qDebug() << "Item::mousePressEvent";
+	}
     QLabel::mousePressEvent(event);
 }
 
@@ -36,7 +41,7 @@ void Item::startDrag() {
     if (event->buttons() & Qt::LeftButton) {
         int distance = (event->pos() - m_DragStart).manhattanLength();
         if (distance > QApplication::startDragDistance()) {
-			if (m_ToCopy) {
+			if (m_dragEnable) {
 				startDrag();
 			}
         }
@@ -52,13 +57,13 @@ QString Item::type() const {
     return m_Type;
 }
 
-void Item::setToCopy(bool ToCopy) {
-	m_ToCopy = ToCopy;
+void Item::setDragEnable(bool dragEnable) {
+	m_dragEnable = dragEnable;
 }
 
 void Item::eat() {
 	m_Type = "";
 	m_Picture = "";
-	clear();
+	setPixmap(QPixmap());
 	m_Player->play();
 }

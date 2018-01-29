@@ -10,7 +10,6 @@ Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
 }
 
 void Inventory::createFormInterior() {
-    qDebug() << "Inventory";
 	uint size = 270;
 
 	setColumnCount(m_Size);
