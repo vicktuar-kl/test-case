@@ -11,14 +11,15 @@ class Item : public QLabel {
 private:
     QString m_Type;
     QString m_Picture;
-    QPixmap m_Pixmap;
+
 	QMediaPlayer* m_Player;
 	QMediaPlaylist* m_Playlist;
 
     QPoint m_DragStart;
+	bool m_ToCopy;
 
     void createFormInterior();
-    void startDrag();
+	void startDrag();
 
 protected:
     virtual void mousePressEvent(QMouseEvent *event) override;
@@ -29,7 +30,7 @@ public:
 
     QString picture() const;
     QString type() const;
-    QPixmap pixmap() const;
+	void setToCopy(bool ToCopy);
 	void eat();
 
 signals:

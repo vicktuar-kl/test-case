@@ -4,17 +4,7 @@
 
 Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
 	: m_Size(size), QTableWidget(parent) {
-
-	setAcceptDrops(true);
-	setDragDropOverwriteMode(true);
-	setDragDropMode(QAbstractItemView::InternalMove);
-	viewport()->setAcceptDrops(true);
-	setDropIndicatorShown(true);
-
-	setMouseTracking(true);
-
-	connect(this, SIGNAL(cellEntered(int,int)), this, SLOT(selectCell(int, int)));
-	connect(this, SIGNAL(cellActivated(int,int)), this, SLOT(selectCell(int, int)));
+	setDragEnabled(true);
 
     createFormInterior();
 }
@@ -50,31 +40,11 @@ void Inventory::createFormInterior() {
 
 	for (uint i = 0; i < m_Size; ++i) {
 		for (uint j = 0; j < m_Size; ++j) {
-			setCellWidget(i, j, new InventoryCell); // connect signal droppedItem with slot InventoryCell::setItem
+			InventoryCell* currentCell = new InventoryCell(i, j);
+			setCellWidget(i, j, currentCell);
+			connect(currentCell, SIGNAL(droppedItem(int,int)), this, SLOT(selectCell(int,int)));
 		}
 	}
-}
-
-/*virtual*/ void Inventory::dragEnterEvent(QDragEnterEvent *event) /*override*/ {
-	if (event->mimeData()->hasFormat(WidgetMimeData::mimeType())) {
-        event->acceptProposedAction();
-	}
-	QTableWidget::dragEnterEvent(event);
-}
-
-/*virtual*/ void Inventory::dropEvent(QDropEvent *event) /*override*/ {
-	qDebug() << "Dropped!";
-	const WidgetMimeData* md =
-			dynamic_cast<const WidgetMimeData*>(event->mimeData());
-	if (md) {
-		Item* droppedItem = dynamic_cast<Item*>(md->widget());
-		InventoryCell* currentCell = dynamic_cast<InventoryCell*>(cellWidget(m_SelectedRow, m_SelectedCol));
-		if (currentCell->quantity() == 0) {
-			currentCell->setContent(droppedItem);
-		}
-		currentCell->incQuantity();
-	}
-	QTableWidget::dropEvent(event);
 }
 
 uint Inventory::size() const {
@@ -82,10 +52,6 @@ uint Inventory::size() const {
 }
 
 void Inventory::selectCell(int row, int col) {	
-	m_SelectedRow = row;
-	m_SelectedCol = col;
-	if (this->hasFocus()) {
-		setCurrentCell(m_SelectedRow, m_SelectedCol);
-		qDebug() << "(" << m_SelectedRow << ", " << m_SelectedCol << ") selected cell";
-	}
+	setCurrentCell(row, col);
+	qDebug() << "(" << row << ", " << col << ") selected cell";
 }
