@@ -3,24 +3,27 @@
 #include "item.h"
 
 Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/)
-    : m_Type(type), m_Picture(picture), m_Pixmap(m_Picture), QLabel(parent) {
-	qDebug() << "Item create";
+	: m_Type(type), m_Picture(picture), m_ToCopy(true), QLabel(parent) {
+	qDebug() << "Create Item";
+	m_Player = new QMediaPlayer;
+	m_Playlist = new QMediaPlaylist(m_Player);
+	m_Player->setPlaylist(m_Playlist);
+	m_Playlist->addMedia(QUrl("qrc:/crunch.mp3"));
+
     createFormInterior();
 }
 
 void Item::createFormInterior() {
-    m_Pixmap.load(m_Picture);
-    m_Pixmap = m_Pixmap.scaled(QSize(250, 250), Qt::KeepAspectRatio);
-    setPixmap(m_Pixmap);
+	setPixmap(QPixmap(m_Picture).scaled(QSize(250, 250), Qt::KeepAspectRatio));
     setMinimumSize(250, 250);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
 void Item::startDrag() {
-	Item* copyItem = new Item(m_Picture, m_Type);
-	WidgetDrag* drag = new WidgetDrag(copyItem);
-	drag->setWidget(copyItem);
-	drag->exec(Qt::CopyAction);
+	Item* draggedItem = new Item(m_Picture, m_Type);
+	WidgetDrag* drag = new WidgetDrag(draggedItem);
+	drag->setWidget(draggedItem);
+	drag->exec(Qt::MoveAction);
 }
 
 /*virtual*/ void Item::mousePressEvent(QMouseEvent *event) /*override*/ {
@@ -33,7 +36,9 @@ void Item::startDrag() {
     if (event->buttons() & Qt::LeftButton) {
         int distance = (event->pos() - m_DragStart).manhattanLength();
         if (distance > QApplication::startDragDistance()) {
-            startDrag();
+			if (m_ToCopy) {
+				startDrag();
+			}
         }
     }
     QLabel::mouseMoveEvent(event);
@@ -47,6 +52,13 @@ QString Item::type() const {
     return m_Type;
 }
 
-QPixmap Item::pixmap() const {
-    return m_Pixmap;
+void Item::setToCopy(bool ToCopy) {
+	m_ToCopy = ToCopy;
+}
+
+void Item::eat() {
+	m_Type = "";
+	m_Picture = "";
+	clear();
+	m_Player->play();
 }
