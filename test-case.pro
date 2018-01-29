@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +31,8 @@ SOURCES += \
     item.cpp \
     mainmenu.cpp \
     widgetdrag.cpp \
-    widgetdmimedata.cpp
+    widgetdmimedata.cpp \
+    inventorycell.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     item.h \
     mainmenu.h \
     widgetdrag.h \
-    widgetmimedata.h
+    widgetmimedata.h \
+    inventorycell.h
 
 RESOURCES += \
     resources.qrc

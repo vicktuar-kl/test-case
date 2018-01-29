@@ -1,6 +1,8 @@
 #pragma once
 
-#include <QLabel>
+#include <QtWidgets>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 #include "database.h"
 
 class Item : public QLabel {
@@ -10,6 +12,8 @@ private:
     QString m_Type;
     QString m_Picture;
     QPixmap m_Pixmap;
+	QMediaPlayer* m_Player;
+	QMediaPlaylist* m_Playlist;
 
     QPoint m_DragStart;
 
@@ -26,6 +30,7 @@ public:
     QString picture() const;
     QString type() const;
     QPixmap pixmap() const;
+	void eat();
 
 signals:
 

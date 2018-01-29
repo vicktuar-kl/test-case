@@ -3,8 +3,12 @@
 #include "item.h"
 
 Item::Item(QString picture, QString type/* = ""*/, QWidget *parent/* = nullptr*/)
-    : m_Type(type), m_Picture(picture), m_Pixmap(m_Picture), QLabel(parent) {
-	qDebug() << "Item create";
+	: m_Type(type), m_Picture(picture), m_Pixmap(m_Picture), QLabel(parent) {
+	m_Player = new QMediaPlayer;
+	m_Playlist = new QMediaPlaylist(m_Player);
+	m_Player->setPlaylist(m_Playlist);
+	m_Playlist->addMedia(QUrl("qrc:/crunch.mp3"));
+
     createFormInterior();
 }
 
@@ -48,5 +52,12 @@ QString Item::type() const {
 }
 
 QPixmap Item::pixmap() const {
-    return m_Pixmap;
+	return m_Pixmap;
+}
+
+void Item::eat() {
+	m_Type = "";
+	m_Picture = "";
+	clear();
+	m_Player->play();
 }
