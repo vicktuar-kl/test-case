@@ -1,5 +1,5 @@
 #include <QtWidgets>
-#include "widgetmimedata.hpp"
+#include "widgetmimedata.h"
 #include "inventory.h"
 
 Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
