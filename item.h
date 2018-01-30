@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
-#include "database.h"
+
 
 class Item : public QLabel {
     Q_OBJECT
@@ -23,7 +23,8 @@ public:
     QString picture() const;
     QString type() const;
 	void reset();
-	void eat();	
+	void eat();
+	static QString mimeType();
 
 signals:
 

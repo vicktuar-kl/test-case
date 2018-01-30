@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent/* = nullptr*/)
 	//showFullScreen();
 	m_MainMenu = new MainMenu(this);
     m_Inventory = new Inventory;
-	m_Source = new InventoryCell(-1, -1, 1, ":/apple.jpg", "Apple", true);
-	m_Source->setDisabled(true);
+	m_Source = new InventoryCell(true);
 	m_ButtonMainMenu = new QPushButton("Main Menu");
 	m_ButtonMainMenu->setMaximumWidth(400);
 
@@ -25,12 +24,12 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::createFormInterior() {
-    qDebug() << "Main Window";
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *subHLayout = new QHBoxLayout;
     QVBoxLayout *subVLayout = new QVBoxLayout;
 
     subVLayout->setMargin(15);
+	m_Source->view();
 	subVLayout->addWidget(m_Source);
 	subVLayout->addWidget(m_ButtonMainMenu);
 

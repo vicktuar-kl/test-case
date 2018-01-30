@@ -16,27 +16,33 @@ private:
 	QLabel* m_NumberText;
 
 	QPoint m_DragStart;
-	void startDrag();
 
 	void updateNumberText();
 
 protected:
+	// drag
 	virtual void mouseMoveEvent(QMouseEvent* event) override;
 	virtual void mousePressEvent(QMouseEvent* event) override;
 
+	// drop
+	virtual void dragEnterEvent(QDragEnterEvent* event) override;
+	virtual void dropEvent(QDropEvent* event) override;
+
 public:
-	explicit InventoryCell(QWidget* parent = nullptr);
+	explicit InventoryCell(bool isSource = false, QWidget* parent = nullptr);
 	explicit InventoryCell(int row, int col, int number,
 						   Item* item, bool isSource = false,
 						   QWidget* parent = nullptr);
+	explicit InventoryCell(int row, int col, QWidget* parent = nullptr);
 
 	void view();
 	void setNumber(int number);
 	int number() const;
-
-	void setIsSource(bool isSource);
+	Item* content() const;
+	void setContent(Item* content);
 
 signals:
+	void selectInvCellSignal(int row, int col);
 
 public slots:
 };

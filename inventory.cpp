@@ -2,7 +2,7 @@
 #include "inventorycell.h"
 #include "inventory.h"
 
-Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
+Inventory::Inventory(int size/* = 3*/, QWidget *parent/* = nullptr*/)
 	: m_Size(size), QTableWidget(parent) {
 	setAcceptDrops(true);
 	setDragDropOverwriteMode(true);
@@ -14,7 +14,7 @@ Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
 }
 
 void Inventory::createFormInterior() {
-	uint size = 250;
+	int size = 250;
 
 	setColumnCount(m_Size);
 	setRowCount(m_Size);
@@ -40,39 +40,49 @@ void Inventory::createFormInterior() {
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-}
 
-void Inventory::dragEnterEvent(QDragEnterEvent* event) {
-	if (event->mimeData()->hasFormat("application/x-item")) {
-		event->acceptProposedAction();
-	} else {
-		event->ignore();
+	for (int i = 0; i < m_Size; ++i) {
+		for (int j = 0; j < m_Size; ++j) {
+			InventoryCell* tempCell = new InventoryCell(i, j);
+			connect(tempCell, SIGNAL(selectInvCellSignal(int,int)), this, SLOT(selectCellSlot(int,int)));
+			setCellWidget(i, j, tempCell);
+			m_Cells.push_back(tempCell);
+		}
 	}
 }
 
-void Inventory::dropEvent(QDropEvent* event) {
-	if (event->mimeData()->hasFormat("application/x-item")) {
-		QModelIndex index = indexAt(event->pos());
-		QByteArray data = event->mimeData()->data("application/x-item");
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
+//void Inventory::dragEnterEvent(QDragEnterEvent* event) {
+//	QModelIndex index = indexAt(event->pos());
+//	emit cellEntered(index.row(), index.column());
+//}
 
-		// TODO: передавать Item и количество
-		QString picture;
-		QString type;
-		int number;
+//void Inventory::dropEvent(QDropEvent* event) {
+////	if (event->mimeData()->hasFormat("application/x-item")) {
+////		QModelIndex index = indexAt(event->pos());
+////		QByteArray data = event->mimeData()->data("application/x-item");
+////		QDataStream dataStream(&data, QIODevice::ReadOnly);
 
-		dataStream >> picture >> type >> number;
+////		// TODO: передавать Item и количество
+////		QString picture;
+////		QString type;
+////		int number;
 
-		InventoryCell* tempCell = new InventoryCell(index.row(), index.column(),
-													   number, );
+////		dataStream >> picture >> type >> number;
 
-		setCellWidget(index.row(), index.column(), tempCell);
-		m_Cells.push_back(tempCell);
-	} else {
-		event->ignore();
-	}
+////		InventoryCell* tempCell = new InventoryCell(index.row(), index.column(),
+////													   number, );
+
+////		setCellWidget(index.row(), index.column(), tempCell);
+////		m_Cells.push_back(tempCell);
+////	} else {
+////		event->ignore();
+////	}
+//}
+
+int Inventory::size() const {
+	return m_Size;
 }
 
-uint Inventory::size() const {
-    return m_Size;
+void Inventory::selectCellSlot(int row, int col)	{
+	setCurrentCell(row, col);
 }

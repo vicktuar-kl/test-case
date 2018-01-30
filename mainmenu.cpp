@@ -17,7 +17,6 @@ MainMenu::MainMenu(QWidget* parent/* = nullptr*/)
 }
 
 void MainMenu::createFormInterior() {
-    qDebug() << "Main Menu";
     QHBoxLayout *layout = new QHBoxLayout;
 
 	layout->addWidget(m_Start, 0, Qt::AlignTop | Qt::AlignHCenter);

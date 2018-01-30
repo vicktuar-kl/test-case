@@ -1,11 +1,9 @@
 #include <QtWidgets>
-#include "widgetdrag.h"
 #include "item.h"
 #include "inventorycell.h"
 
 Item::Item(QString picture, QString type, QWidget *parent/* = nullptr*/)
 	: QLabel(parent), m_Picture(picture), m_Type(type) {
-	qDebug() << "Create Item";
 	m_Player = new QMediaPlayer;
 	m_Playlist = new QMediaPlaylist(m_Player);
 	m_Player->setPlaylist(m_Playlist);
@@ -37,4 +35,8 @@ void Item::reset() {
 void Item::eat() {
 	reset();
 	m_Player->play();
+}
+
+QString Item::mimeType() {
+	return "application/x-item";
 }

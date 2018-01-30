@@ -4,27 +4,27 @@
 #include "item.h"
 #include "inventorycell.h"
 
-typedef unsigned int uint;
-
 class Inventory : public QTableWidget {
     Q_OBJECT
 private:
-    uint m_Size;
+	int m_Size;
 	QVector<InventoryCell*> m_Cells;
 
     void createFormInterior();
-	void cellFilling();
 
 protected:
-	virtual void dragEnterEvent(QDragEnterEvent* event) override;
-	virtual void dropEvent(QDropEvent* event) override;
+//	virtual void dragEnterEvent(QDragEnterEvent* event) override;
+//	virtual void dropEvent(QDropEvent* event) override;
 
 public:
-	explicit Inventory(uint size = 3, QWidget* parent = nullptr);
+	explicit Inventory(int size = 3, QWidget* parent = nullptr);
 
-    uint size() const;
+	int size() const;
+
+	friend class InventoryCell;
 
 signals:
 
-public slots:
+private slots:
+	void selectCellSlot(int row, int col);
 };
