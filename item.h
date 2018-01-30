@@ -31,7 +31,8 @@ public:
     QString picture() const;
     QString type() const;
 	void setDragEnable(bool ToCopy);
-	void eat();
+	void reset();
+	void eat();	
 
 signals:
 

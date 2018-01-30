@@ -61,9 +61,13 @@ void Item::setDragEnable(bool dragEnable) {
 	m_dragEnable = dragEnable;
 }
 
-void Item::eat() {
+void Item::reset() {
 	m_Type = "";
 	m_Picture = "";
 	setPixmap(QPixmap());
+}
+
+void Item::eat() {
+	reset();
 	m_Player->play();
 }

@@ -35,6 +35,7 @@ public:
 	void setQuantity(const uint& Quantity);
 	void setContent(Item* Content);
 	bool isEmpty();
+	void reset();
 
 signals:
 	void droppedItem(int row, int col);

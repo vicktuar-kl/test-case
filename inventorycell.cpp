@@ -26,14 +26,14 @@ void InventoryCell::startDrag() {
 	WidgetDrag* drag = new WidgetDrag(this);
 	drag->setWidget(this);
 	drag->exec();
-	updateLabel();
 }
 
 /*virtual*/ void InventoryCell::mouseMoveEvent(QMouseEvent *event) /*override*/ {
 	if (event->buttons() & Qt::LeftButton) {
 		int distance = (event->pos() - m_DragStart).manhattanLength();
-		if (distance > QApplication::startDragDistance()) {
+		if (isEmpty() && distance > QApplication::startDragDistance()) {
 			startDrag();
+			reset();
 		}
 	}
 	QWidget::mouseMoveEvent(event);
@@ -99,16 +99,6 @@ uint InventoryCell::quantity() const {
 	return m_Quantity;
 }
 
-void InventoryCell::incQuantity() {
-	++m_Quantity;
-	updateLabel();
-}
-
-void InventoryCell::decQuantity() {
-	--m_Quantity;
-	updateLabel();
-}
-
 Item* InventoryCell::content() const {
 	return m_Content;
 }
@@ -119,6 +109,13 @@ void InventoryCell::setQuantity(const uint& quantity) {
 void InventoryCell::setContent(Item* content) {
 	m_Content = content;
 	m_Content->setPixmap(*content->pixmap());
+}
+
+void InventoryCell::reset() {
+	m_Quantity = 0;
+	m_Content->reset();
+	m_Content  = nullptr;
+	delete layout();
 }
 
 bool InventoryCell::isEmpty() {
