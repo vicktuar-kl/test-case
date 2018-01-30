@@ -4,13 +4,14 @@
 #include "mainmenu.h"
 #include "item.h"
 #include "inventory.h"
+#include "inventorycell.h"
 
 class MainWindow : public QWidget {
     Q_OBJECT
 private:
 	MainMenu* m_MainMenu;
 	Inventory* m_Inventory;
-	Item* m_Item;
+	InventoryCell* m_Source;
 	QPushButton* m_ButtonMainMenu;
 
     void createFormInterior();

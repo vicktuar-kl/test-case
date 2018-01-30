@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent/* = nullptr*/)
 	//showFullScreen();
 	m_MainMenu = new MainMenu(this);
     m_Inventory = new Inventory;
-    m_Item = new Item(":/apple.jpg", "Apple");
-	m_Item->setDisabled(true);
+	m_Source = new InventoryCell(-1, -1, 1, ":/apple.jpg", "Apple", true);
+	m_Source->setDisabled(true);
 	m_ButtonMainMenu = new QPushButton("Main Menu");
 	m_ButtonMainMenu->setMaximumWidth(400);
 
@@ -31,7 +31,7 @@ void MainWindow::createFormInterior() {
     QVBoxLayout *subVLayout = new QVBoxLayout;
 
     subVLayout->setMargin(15);
-	subVLayout->addWidget(m_Item, 0, Qt::AlignCenter);
+	subVLayout->addWidget(m_Source);
 	subVLayout->addWidget(m_ButtonMainMenu);
 
     subHLayout->setMargin(15);
@@ -46,12 +46,12 @@ void MainWindow::createFormInterior() {
 
 void MainWindow::disable() {
 	m_Inventory->setDisabled(true);
-	m_Item->setDisabled(true);
+	m_Source->setDisabled(true);
 	m_ButtonMainMenu->setDisabled(true);
 }
 
 void MainWindow::enable() {
 	m_Inventory->setDisabled(false);
-	m_Item->setDisabled(false);
+	m_Source->setDisabled(false);
 	m_ButtonMainMenu->setDisabled(false);
 }

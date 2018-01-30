@@ -1,44 +1,42 @@
 #pragma once
 
-#include <QtWidgets>
+#include <QWidget>
 #include "item.h"
-#include "inventory.h"
 
 class InventoryCell : public QWidget {
 	Q_OBJECT
 private:
 	int m_Row;
 	int m_Col;
-	uint m_Quantity;
+	int m_Number;
+
+	bool m_isSource;
+
 	Item* m_Content;
-	QLabel* m_labelQuantityItems;
+	QLabel* m_NumberText;
 
 	QPoint m_DragStart;
-
-	void createFormInterior();
-	void updateLabel();
 	void startDrag();
 
+	void updateNumberText();
+
 protected:
-	virtual void mousePressEvent(QMouseEvent* event) override;
 	virtual void mouseMoveEvent(QMouseEvent* event) override;
-	virtual void dragEnterEvent(QDragEnterEvent* event) override;
-	virtual void dropEvent(QDropEvent* event) override;
+	virtual void mousePressEvent(QMouseEvent* event) override;
 
 public:
-	explicit InventoryCell(int row, int col, QWidget* parent = nullptr);
+	explicit InventoryCell(QWidget* parent = nullptr);
+	explicit InventoryCell(int row, int col, int number,
+						   Item* item, bool isSource = false,
+						   QWidget* parent = nullptr);
 
-	uint quantity() const;
-	void incQuantity();
-	void decQuantity();
-	Item* content() const;
-	void setQuantity(const uint& Quantity);
-	void setContent(Item* Content);
-	bool isEmpty();
-	void reset();
+	void view();
+	void setNumber(int number);
+	int number() const;
+
+	void setIsSource(bool isSource);
 
 signals:
-	void droppedItem(int row, int col);
 
 public slots:
 };

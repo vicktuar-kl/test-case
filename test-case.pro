@@ -30,8 +30,6 @@ SOURCES += \
     database.cpp \
     item.cpp \
     mainmenu.cpp \
-    widgetdrag.cpp \
-    widgetdmimedata.cpp \
     inventorycell.cpp
 
 HEADERS += \
@@ -40,8 +38,6 @@ HEADERS += \
     database.h \
     item.h \
     mainmenu.h \
-    widgetdrag.h \
-    widgetmimedata.h \
     inventorycell.h
 
 RESOURCES += \

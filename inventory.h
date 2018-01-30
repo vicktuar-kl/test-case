@@ -10,13 +10,14 @@ class Inventory : public QTableWidget {
     Q_OBJECT
 private:
     uint m_Size;
+	QVector<InventoryCell*> m_Cells;
 
     void createFormInterior();
 	void cellFilling();
 
 protected:
-//	virtual void dragEnterEvent(QDragEnterEvent* event) override;
-//	virtual void dropEvent(QDropEvent* event) override;
+	virtual void dragEnterEvent(QDragEnterEvent* event) override;
+	virtual void dropEvent(QDropEvent* event) override;
 
 public:
 	explicit Inventory(uint size = 3, QWidget* parent = nullptr);
@@ -26,5 +27,4 @@ public:
 signals:
 
 public slots:
-	void selectCell(int row, int col);
 };

@@ -1,16 +1,20 @@
 #include <QtWidgets>
-#include "widgetmimedata.h"
+#include "inventorycell.h"
 #include "inventory.h"
 
 Inventory::Inventory(uint size/* = 3*/, QWidget *parent/* = nullptr*/)
 	: m_Size(size), QTableWidget(parent) {
-	setDragEnabled(true);
+	setAcceptDrops(true);
+	setDragDropOverwriteMode(true);
+	setDragDropMode(QAbstractItemView::InternalMove);
+	viewport()->setAcceptDrops(true);
+	setDropIndicatorShown(true);
 
     createFormInterior();
 }
 
 void Inventory::createFormInterior() {
-	uint size = 270;
+	uint size = 250;
 
 	setColumnCount(m_Size);
 	setRowCount(m_Size);
@@ -36,21 +40,39 @@ void Inventory::createFormInterior() {
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
 
-	for (uint i = 0; i < m_Size; ++i) {
-		for (uint j = 0; j < m_Size; ++j) {
-			InventoryCell* currentCell = new InventoryCell(i, j);
-			setCellWidget(i, j, currentCell);
-			connect(currentCell, SIGNAL(droppedItem(int,int)), this, SLOT(selectCell(int,int)));
-		}
+void Inventory::dragEnterEvent(QDragEnterEvent* event) {
+	if (event->mimeData()->hasFormat("application/x-item")) {
+		event->acceptProposedAction();
+	} else {
+		event->ignore();
+	}
+}
+
+void Inventory::dropEvent(QDropEvent* event) {
+	if (event->mimeData()->hasFormat("application/x-item")) {
+		QModelIndex index = indexAt(event->pos());
+		QByteArray data = event->mimeData()->data("application/x-item");
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+
+		// TODO: передавать Item и количество
+		QString picture;
+		QString type;
+		int number;
+
+		dataStream >> picture >> type >> number;
+
+		InventoryCell* tempCell = new InventoryCell(index.row(), index.column(),
+													   number, );
+
+		setCellWidget(index.row(), index.column(), tempCell);
+		m_Cells.push_back(tempCell);
+	} else {
+		event->ignore();
 	}
 }
 
 uint Inventory::size() const {
     return m_Size;
-}
-
-void Inventory::selectCell(int row, int col) {	
-	setCurrentCell(row, col);
-	qDebug() << "(" << row << ", " << col << ") selected cell";
 }
