@@ -15,14 +15,13 @@ InventoryCell::InventoryCell(bool isSource/* = false*/, QWidget* parent/* = null
 	if (!m_isSource)
 		setAcceptDrops(true);
 	else {
-		m_Content = new Item(":/apple.jpg", "Apple");
+		m_Content = new Item("Apple", ":/apple.jpg");
 	}
 }
 
 InventoryCell::InventoryCell(int row, int col, QWidget* parent/* = nullptr*/)
 	: QWidget(parent), m_Row(row), m_Col(col), m_Number(0), m_isSource(false) {
-	if (!m_isSource)
-		setAcceptDrops(true);
+	setAcceptDrops(true);
 }
 
 Item* InventoryCell::content() const {
@@ -31,6 +30,15 @@ Item* InventoryCell::content() const {
 
 void InventoryCell::setContent(Item* Content) {
 	m_Content = Content;
+}
+
+void InventoryCell::actionWithItem() {
+	m_Content->action();
+	--m_Number;
+	updateNumberText();
+	if (m_Number == 0) {
+		clearCell();
+	}
 }
 
 void InventoryCell::setNumber(int number) {
@@ -42,15 +50,15 @@ int InventoryCell::number() const {
 }
 
 /*virtual*/ void InventoryCell::mousePressEvent(QMouseEvent *event) /*override*/ {
-	qDebug() << "InventoryCell::mousePressEvent enter";
 	if (event->button() == Qt::LeftButton) {
 		m_DragStart = event->pos();
+	} else if (!m_isSource && event->button() == Qt::RightButton) {
+		actionWithItem();
 	}
 	QWidget::mousePressEvent(event);
 }
 
 /*virtual*/ void InventoryCell::mouseMoveEvent(QMouseEvent *event) /*override*/ {
-	qDebug() << "InventoryCell::mouseMoveEvent enter";
 	if (event->buttons() & Qt::LeftButton) {
 		int distance = (event->pos() - m_DragStart).manhattanLength();
 		if (distance > QApplication::startDragDistance()) {
@@ -59,7 +67,7 @@ int InventoryCell::number() const {
 			QMimeData* mimeData = new QMimeData;
 
 			// TODO: передавать Item и количество
-			dataStream << m_Content->picture() << m_Content->type() << m_Number;
+			dataStream << m_Content->type() << m_Content->picture() << m_Number;
 			mimeData->setData(m_Content->mimeType(), data);
 
 			QDrag* drag = new QDrag(this);
@@ -71,9 +79,7 @@ int InventoryCell::number() const {
 				drag->exec(Qt::CopyAction);
 			else {
 				drag->exec(Qt::MoveAction);
-				delete m_NumberText;
-				delete m_Content;
-				delete layout();
+				clearCell();
 				m_Number = 0;
 			}
 		}
@@ -82,22 +88,20 @@ int InventoryCell::number() const {
 }
 
 /*virtual*/ void InventoryCell::dragEnterEvent(QDragEnterEvent* event) /*override*/ {
-	qDebug() << "InventoryCell::dragEnterEvent enter";
 	if (event->mimeData()->hasFormat(Item::mimeType())) {
 		event->acceptProposedAction();
 	}
 }
 
 /*virtual*/ void InventoryCell::dropEvent(QDropEvent* event) /*override*/ {
-	qDebug() << "InventoryCell::dropEvent enter";
 	if (event->mimeData()->hasFormat(Item::mimeType())) {
 		QByteArray data = event->mimeData()->data(Item::mimeType());
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
 
-		QString picture, type;
+		QString type, picture;
 		int tempNumber;
-		dataStream >> picture >> type >> tempNumber;
-		Item* tempItem = new Item(picture, type);
+		dataStream >> type >> picture >> tempNumber;
+		Item* tempItem = new Item(type, picture);
 
 		if (m_Number == 0) {
 			m_Content = tempItem;
@@ -120,6 +124,16 @@ void InventoryCell::view() {
 		layout->addWidget(m_NumberText, 0, Qt::AlignBottom | Qt::AlignRight);
 	}
 	setLayout(layout);
+}
+
+void InventoryCell::clearCell() {
+	delete m_NumberText;
+	m_Content->setPixmap(QPixmap(""));
+	m_Content->setPicture("");
+	m_Content->setType("");
+	//delete m_Content; // расскоментировать на Windows
+	delete layout();
+	m_Number = 0;
 }
 
 void InventoryCell::updateNumberText() {

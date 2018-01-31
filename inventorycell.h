@@ -18,6 +18,7 @@ private:
 	QPoint m_DragStart;
 
 	void updateNumberText();
+	void clearCell();
 
 protected:
 	// drag
@@ -45,4 +46,5 @@ signals:
 	void selectInvCellSignal(int row, int col);
 
 public slots:
+	void actionWithItem();
 };

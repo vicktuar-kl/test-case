@@ -1,8 +1,7 @@
 #pragma once
 
 #include <QtWidgets>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
+#include <QSoundEffect>
 
 
 class Item : public QLabel {
@@ -12,19 +11,19 @@ private:
     QString m_Type;
     QString m_Picture;
 
-	QMediaPlayer* m_Player;
-	QMediaPlaylist* m_Playlist;
+	QSoundEffect m_SoundEffect;
 
     void createFormInterior();
 
 public:
-	explicit Item(QString picture, QString type, QWidget *parent = nullptr);
+	explicit Item(QString type, QString picture, QWidget *parent = nullptr);
 
     QString picture() const;
     QString type() const;
-	void reset();
-	void eat();
+	void action();
 	static QString mimeType();
+	void setType(const QString& Type);
+	void setPicture(const QString& Picture);
 
 signals:
 

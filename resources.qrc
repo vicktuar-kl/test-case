@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file alias="apple.jpg">resources/apple2.jpg</file>
-		<file alias="crunch.mp3">resources/apple_crunch.mp3</file>
+		<file alias="crunch.wav">resources/apple_crunch.wav</file>
     </qresource>
 </RCC>
