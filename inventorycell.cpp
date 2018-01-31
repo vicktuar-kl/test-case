@@ -15,7 +15,7 @@ InventoryCell::InventoryCell(bool isSource/* = false*/, QWidget* parent/* = null
 	if (!m_isSource)
 		setAcceptDrops(true);
 	else {
-		m_Content = new Item("Apple", ":/apple.jpg");
+		m_Content = new Item("Apple");
 	}
 }
 
@@ -67,7 +67,7 @@ int InventoryCell::number() const {
 			QMimeData* mimeData = new QMimeData;
 
 			// TODO: передавать Item и количество
-			dataStream << m_Content->type() << m_Content->picture() << m_Number;
+			dataStream << m_Content->type() << m_Content->iconPath() << m_Number;
 			mimeData->setData(m_Content->mimeType(), data);
 
 			QDrag* drag = new QDrag(this);

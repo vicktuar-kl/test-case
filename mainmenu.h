@@ -5,8 +5,8 @@
 class MainMenu : public QWidget {
     Q_OBJECT
 private:
-	QPushButton* m_Start;
-	QPushButton* m_Exit;
+	QPushButton* m_NewGame;
+	QPushButton* m_Quit;
 
     void createFormInterior();
 

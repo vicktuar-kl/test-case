@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     inventory.cpp \
-    database.cpp \
     item.cpp \
     mainmenu.cpp \
     inventorycell.cpp
@@ -35,7 +34,6 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     inventory.h \
-    database.h \
     item.h \
     mainmenu.h \
     inventorycell.h
