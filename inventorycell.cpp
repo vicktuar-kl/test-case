@@ -7,7 +7,6 @@ InventoryCell::InventoryCell(int row, int col, int number,
 	  m_isSource(isSource), m_Content(item) {
 	if (!m_isSource)
 		setAcceptDrops(true);
-//	view();
 }
 
 InventoryCell::InventoryCell(bool isSource/* = false*/, QWidget* parent/* = nullptr*/)
@@ -66,7 +65,6 @@ int InventoryCell::number() const {
 			QDataStream dataStream(&data, QIODevice::WriteOnly);
 			QMimeData* mimeData = new QMimeData;
 
-			// TODO: передавать Item и количество
 			dataStream << m_Content->type() << m_Content->picture() << m_Number;
 			mimeData->setData(m_Content->mimeType(), data);
 
