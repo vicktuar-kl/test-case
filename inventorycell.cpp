@@ -20,7 +20,7 @@ InventoryCell::InventoryCell(bool isSource/* = false*/, QWidget* parent/* = null
 }
 
 InventoryCell::InventoryCell(int row, int col, QWidget* parent/* = nullptr*/)
-	: QWidget(parent), m_Row(row), m_Col(col) {
+	: QWidget(parent), m_Row(row), m_Col(col), m_Number(0), m_isSource(false) {
 	if (!m_isSource)
 		setAcceptDrops(true);
 }
@@ -42,6 +42,7 @@ int InventoryCell::number() const {
 }
 
 /*virtual*/ void InventoryCell::mousePressEvent(QMouseEvent *event) /*override*/ {
+	qDebug() << "InventoryCell::mousePressEvent enter";
 	if (event->button() == Qt::LeftButton) {
 		m_DragStart = event->pos();
 	}
@@ -49,6 +50,7 @@ int InventoryCell::number() const {
 }
 
 /*virtual*/ void InventoryCell::mouseMoveEvent(QMouseEvent *event) /*override*/ {
+	qDebug() << "InventoryCell::mouseMoveEvent enter";
 	if (event->buttons() & Qt::LeftButton) {
 		int distance = (event->pos() - m_DragStart).manhattanLength();
 		if (distance > QApplication::startDragDistance()) {
@@ -80,12 +82,14 @@ int InventoryCell::number() const {
 }
 
 /*virtual*/ void InventoryCell::dragEnterEvent(QDragEnterEvent* event) /*override*/ {
+	qDebug() << "InventoryCell::dragEnterEvent enter";
 	if (event->mimeData()->hasFormat(Item::mimeType())) {
 		event->acceptProposedAction();
 	}
 }
 
 /*virtual*/ void InventoryCell::dropEvent(QDropEvent* event) /*override*/ {
+	qDebug() << "InventoryCell::dropEvent enter";
 	if (event->mimeData()->hasFormat(Item::mimeType())) {
 		QByteArray data = event->mimeData()->data(Item::mimeType());
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
