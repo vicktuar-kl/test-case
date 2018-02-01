@@ -3,29 +3,25 @@
 #include <QtWidgets>
 #include <QSoundEffect>
 
+// ============================================================================
+// Класс, описывающий характеристики предмета, яблока
 
 class Item : public QLabel {
     Q_OBJECT
 
 private:
-    QString m_Type;
-    QString m_Picture;
+	QString m_Type;				// тип предмета
+	QString m_IconPath;			// путь до картинки с предметом
 
-	QSoundEffect m_SoundEffect;
+	QSoundEffect m_SoundEffect;	// звуковой эффект для действия с предметом в инвентаре
 
-    void createFormInterior();
+	void createFormInterior();	// фиксация размером виджета (иконки)
 
 public:
-	explicit Item(QString type, QString picture, QWidget *parent = nullptr);
+	explicit Item(QString type, QWidget *parent = nullptr);	// Создаём объект, по его типу выбирается иконка и звук для действия
 
-    QString picture() const;
+	QString iconPath() const;
     QString type() const;
-	void action();
+	void action();					// действие с предметом
 	static QString mimeType();
-	void setType(const QString& Type);
-	void setPicture(const QString& Picture);
-
-signals:
-
-public slots:
 };
