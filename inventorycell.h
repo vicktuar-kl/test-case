@@ -10,12 +10,17 @@ class InventoryCell : public QWidget {
 	Q_OBJECT	
 public:
 	explicit InventoryCell(bool isSource = true, QWidget* parent = nullptr);	// конструктор по-умолчанию, вечный генератор яблок
-	explicit InventoryCell(int row, int col, int number,						// конструктор для создания заполненной ячейки
+	InventoryCell(int row, int col, int number,						// конструктор для создания заполненной ячейки
 						   Item* item, bool isSource = false,
 						   QWidget* parent = nullptr);
-	explicit InventoryCell(int row, int col, QWidget* parent = nullptr);		// для заполнения инвентаря пустыми ячейками
+	InventoryCell(int row, int col, QWidget* parent = nullptr);		// для заполнения инвентаря пустыми ячейками
 
 	void view();						// компоновка виджета предмета и виджета отображения количества предметов
+
+	int row() const;
+	int col() const;
+	int number() const;
+	Item* content() const;
 
 protected:
 	// drag

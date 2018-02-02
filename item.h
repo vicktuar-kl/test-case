@@ -19,9 +19,10 @@ private:
 
 public:
 	explicit Item(QString type, QWidget *parent = nullptr);	// Создаём объект, по его типу выбирается иконка и звук для действия
+	Item(QString type, QString iconPath, QString soundPath, QWidget* parent = nullptr);
 
 	QString iconPath() const;
-    QString type() const;
+	QString type();
 	void action();					// действие с предметом
 	static QString mimeType();
 };

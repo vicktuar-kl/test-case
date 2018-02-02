@@ -6,14 +6,20 @@
 // пока только яблоки :(
 Item::Item(QString type, QWidget* parent/* = nullptr*/)
 	: QLabel(parent), m_Type(type) {
-	if (m_Type == "Apple") {
+	if (m_Type.toLower() == "apple") {
 		m_IconPath = ":/apple.jpg";
 		m_SoundEffect.setSource(QUrl::fromLocalFile(":/crunch.wav"));
 	}
 	createFormInterior();
 }
 
-// фиксация размером виджета (иконки)
+Item::Item(QString type, QString iconPath, QString soundPath, QWidget* parent/* = nullptr*/)
+	: QLabel(parent), m_Type(type), m_IconPath(iconPath) {
+	m_SoundEffect.setSource(QUrl::fromLocalFile(soundPath));
+	createFormInterior();
+}
+
+// фиксация размеров виджета (иконки)
 void Item::createFormInterior() {
 	setPixmap(QPixmap(m_IconPath).scaled(QSize(250, 250), Qt::KeepAspectRatio));
     setMinimumSize(250, 250);
@@ -26,7 +32,7 @@ QString Item::iconPath() const {
 }
 
 // геттер для типа предмета
-QString Item::type() const {
+QString Item::type() {
 	return m_Type;
 }
 

@@ -13,6 +13,8 @@ class Inventory : public QTableWidget {
 public:
 	explicit Inventory(int size = 3, QWidget* parent = nullptr);
 
+	virtual ~Inventory();
+
 private:
 	int m_Size;		// размер инвентаря, инвентарь квадратный
 	QVector<InventoryCell*> m_Cells;

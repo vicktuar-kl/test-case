@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include "database.h"
 #include "inventorycell.h"
 #include "inventory.h"
 
@@ -9,11 +10,27 @@ Inventory::Inventory(int size/* = 3*/, QWidget *parent/* = nullptr*/)
 	connect(this, SIGNAL(cellEntered(int,int)), this, SLOT(selectCellSlot(int,int)));
 
     createFormInterior();
+
 	for (int i = 0; i < m_Size; ++i) {
 		for (int j = 0; j < m_Size; ++j) {
-			InventoryCell* tempCell = new InventoryCell(i, j);
+			InventoryCell* tempCell;
+			if (Database::countRecordsTable("inventory") == 0) {
+				tempCell = new InventoryCell(i, j);
+			} else {
+				tempCell = Database::inventorySelect(i, j);
+			}
 			setCellWidget(i, j, tempCell);
 			m_Cells.push_back(tempCell);
+		}
+	}
+}
+
+Inventory::~Inventory() {
+	Database::clearInventoryTable();
+	foreach (InventoryCell* temp, m_Cells) {
+		if (temp->content()) {
+			QString type = temp->content()->type();
+			Database::inventoryInsert(temp->row(), temp->col(), /*type,*/ temp->number());
 		}
 	}
 }

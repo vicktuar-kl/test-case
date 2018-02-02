@@ -1,3 +1,4 @@
+#include "database.h"
 #include "inventorycell.h"
 
 // конструктор по-умолчанию, вечный генератор яблок
@@ -6,7 +7,7 @@ InventoryCell::InventoryCell(bool isSource/* = true*/, QWidget* parent/* = nullp
 	if (!m_isSource)
 		setAcceptDrops(true);
 	else {
-		m_Content = new Item("Apple");
+		m_Content = Database::itemSelect("apple");
 	}
 }
 
@@ -19,6 +20,7 @@ InventoryCell::InventoryCell(int row, int col, int number,
 	  m_isSource(isSource), m_Content(item) {
 	if (!m_isSource)
 		setAcceptDrops(true);
+	view();
 }
 
 // для заполнения инвентаря пустыми ячейками, строки и столбцы -
@@ -105,6 +107,22 @@ void InventoryCell::actionWithItem() {
 			updateNumberText();
 		}
 	}
+}
+
+int InventoryCell::number() const {
+	return m_Number;
+}
+
+Item* InventoryCell::content() const {
+	return m_Content;
+}
+
+int InventoryCell::col() const {
+	return m_Col;
+}
+
+int InventoryCell::row() const {
+	return m_Row;
 }
 
 
