@@ -13,8 +13,6 @@ private:
 	QString m_Type;				// тип предмета
 	QString m_IconPath;			// путь до картинки с предметом
 
-	QSoundEffect m_SoundEffect;	// звуковой эффект для действия с предметом в инвентаре
-
 	void createFormInterior();	// фиксация размером виджета (иконки)
 
 public:

@@ -31,7 +31,8 @@ InventoryCell::InventoryCell(int row, int col, QWidget* parent/* = nullptr*/)
 // слот для совершения действия над предметом в ячейке,
 // количество предметов при действии уменьшается, если их нет, то ячейка очищается
 void InventoryCell::actionWithItem() {
-	m_Content->action();
+	m_SoundEffect.setSource(QUrl::fromLocalFile(":/crunch.wav"));
+	m_SoundEffect.play();
 	--m_Number;
 	updateNumberText();
 	if (m_Number == 0) {

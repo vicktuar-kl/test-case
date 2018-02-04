@@ -8,7 +8,6 @@ Item::Item(QString type, QWidget* parent/* = nullptr*/)
 	: QLabel(parent), m_Type(type) {
 	if (m_Type == "Apple") {
 		m_IconPath = ":/apple.jpg";
-		m_SoundEffect.setSource(QUrl::fromLocalFile(":/crunch.wav"));
 	}
 	createFormInterior();
 }
@@ -28,11 +27,6 @@ QString Item::iconPath() const {
 // геттер для типа предмета
 QString Item::type() const {
 	return m_Type;
-}
-
-// действие с предметом, воспроизведение звука
-void Item::action() {
-	m_SoundEffect.play();
 }
 
 // статический метод класса для mime-типа этого класса (нужно для Drag'n'Drop)
