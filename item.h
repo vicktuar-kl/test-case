@@ -12,8 +12,7 @@ class Item : public QLabel {
 private:
 	QString m_Type;				// тип предмета
 	QString m_IconPath;			// путь до картинки с предметом
-
-	QSoundEffect m_SoundEffect;	// звуковой эффект для действия с предметом в инвентаре
+	QString m_SoundPath;		// путь до звукового файла
 
 	void createFormInterior();	// фиксация размером виджета (иконки)
 
@@ -22,7 +21,7 @@ public:
 	Item(QString type, QString iconPath, QString soundPath, QWidget* parent = nullptr);
 
 	QString iconPath() const;
+	QString soundPath() const;
 	QString type();
-	void action();					// действие с предметом
 	static QString mimeType();
 };

@@ -28,7 +28,7 @@ Inventory::Inventory(int size/* = 3*/, QWidget *parent/* = nullptr*/)
 Inventory::~Inventory() {
 	Database::clearInventoryTable();
 	foreach (InventoryCell* temp, m_Cells) {
-		if (temp->content()) {
+		if (temp->state() != InventoryCell::State::Empty) {
 			QString type = temp->content()->type();
 			Database::inventoryInsert(temp->row(), temp->col(), /*type,*/ temp->number());
 		}

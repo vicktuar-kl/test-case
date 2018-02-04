@@ -9,6 +9,7 @@
 class InventoryCell : public QWidget {
 	Q_OBJECT	
 public:
+	enum class State { Empty, Fill };
 	explicit InventoryCell(bool isSource = true, QWidget* parent = nullptr);	// конструктор по-умолчанию, вечный генератор яблок
 	InventoryCell(int row, int col, int number,						// конструктор для создания заполненной ячейки
 						   Item* item, bool isSource = false,
@@ -21,6 +22,7 @@ public:
 	int col() const;
 	int number() const;
 	Item* content() const;
+	State state() const;
 
 protected:
 	// drag
@@ -40,6 +42,10 @@ private:
 
 	Item* m_Content;			// содержимое ячейки
 	QLabel* m_NumberText;		// Надпись для отображения количества предметов
+
+	State m_State;
+
+	QSoundEffect m_SoundEffect;	// звуковой эффект для действия с предметом в инвентаре
 
 	QPoint m_DragStart;			// Координаты начала перетаскивания предмета
 

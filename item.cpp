@@ -8,18 +8,22 @@ Item::Item(QString type, QWidget* parent/* = nullptr*/)
 	: QLabel(parent), m_Type(type) {
 	if (m_Type.toLower() == "apple") {
 		m_IconPath = ":/apple.jpg";
-		m_SoundEffect.setSource(QUrl::fromLocalFile(":/crunch.wav"));
+		m_SoundPath = ":/crunch.wav";
 	}
 	createFormInterior();
 }
 
 Item::Item(QString type, QString iconPath, QString soundPath, QWidget* parent/* = nullptr*/)
-	: QLabel(parent), m_Type(type), m_IconPath(iconPath) {
-	m_SoundEffect.setSource(QUrl::fromLocalFile(soundPath));
+	: QLabel(parent), m_Type(type), m_IconPath(iconPath), m_SoundPath(soundPath) {
 	createFormInterior();
 }
 
 // фиксация размеров виджета (иконки)
+QString Item::soundPath() const
+{
+	return m_SoundPath;
+}
+
 void Item::createFormInterior() {
 	setPixmap(QPixmap(m_IconPath).scaled(QSize(250, 250), Qt::KeepAspectRatio));
     setMinimumSize(250, 250);
@@ -34,11 +38,6 @@ QString Item::iconPath() const {
 // геттер для типа предмета
 QString Item::type() {
 	return m_Type;
-}
-
-// действие с предметом, воспроизведение звука
-void Item::action() {
-	m_SoundEffect.play();
 }
 
 // статический метод класса для mime-типа этого класса (нужно для Drag'n'Drop)

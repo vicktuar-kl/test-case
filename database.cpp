@@ -3,7 +3,7 @@
 
 Database::Database() {
 	m_DB = QSqlDatabase::addDatabase("QSQLITE");
-	m_DB.setDatabaseName("data/database");
+	m_DB.setDatabaseName("database.db");
 	m_DB.open();
 }
 
@@ -28,15 +28,16 @@ bool Database::inventoryInsert(int row, int col, /*QString itemType,*/ int numbe
 
 InventoryCell* Database::inventorySelect(int row, int col) {
 	QSqlQuery query;
-	QString itemType;
-	int itemNumber;
+	QString itemType = "";
+	int itemNumber = 0;
 	QString str = "SELECT item_type, item_number FROM inventory WHERE row = %1 AND col = %2;";
 	str = str.arg(row).arg(col);
-	if (query.exec(str)) {
-		while (query.next()) {
-			itemType = query.value(0).toString();
-			itemNumber = query.value(1).toInt();
-		}
+	query.exec(str);
+	while (query.next()) {
+		itemType = query.value(0).toString();
+		itemNumber = query.value(1).toInt();
+	}
+	if (itemNumber != 0) {
 		Item* temp = itemSelect(itemType);
 		return new InventoryCell(row, col, itemNumber, temp);
 	} else {

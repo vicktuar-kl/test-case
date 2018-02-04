@@ -3,11 +3,14 @@
 
 // конструктор по-умолчанию, вечный генератор яблок
 InventoryCell::InventoryCell(bool isSource/* = true*/, QWidget* parent/* = nullptr*/)
-	: QWidget(parent), m_Number(1), m_isSource(isSource) {
-	if (!m_isSource)
+	: QWidget(parent), m_Number(1), m_isSource(isSource), m_Content(nullptr) {
+	if (!m_isSource) {
 		setAcceptDrops(true);
+		m_State = State::Empty;
+	}
 	else {
 		m_Content = Database::itemSelect("apple");
+		m_State = State::Fill;
 	}
 }
 
@@ -21,23 +24,27 @@ InventoryCell::InventoryCell(int row, int col, int number,
 	if (!m_isSource)
 		setAcceptDrops(true);
 	view();
+	m_State = State::Fill;
 }
 
 // для заполнения инвентаря пустыми ячейками, строки и столбцы -
 // для внесения в БД местоположения ячейки вместе с её содержимым и его количеством
 InventoryCell::InventoryCell(int row, int col, QWidget* parent/* = nullptr*/)
-	: QWidget(parent), m_Row(row), m_Col(col), m_Number(0), m_isSource(false) {
+	: QWidget(parent), m_Row(row), m_Col(col), m_Number(0), m_isSource(false), m_Content(nullptr) {
 	setAcceptDrops(true);
+	m_State = State::Empty;
 }
 
 // слот для совершения действия над предметом в ячейке,
 // количество предметов при действии уменьшается, если их нет, то ячейка очищается
 void InventoryCell::actionWithItem() {
-	m_Content->action();
+	m_SoundEffect.setSource(QUrl::fromLocalFile(m_Content->soundPath()));
+	m_SoundEffect.play();
 	--m_Number;
 	updateNumberText();
 	if (m_Number == 0) {
 		clearCell();
+		m_State = State::Empty;
 	}
 }
 
@@ -45,7 +52,7 @@ void InventoryCell::actionWithItem() {
 /*virtual*/ void InventoryCell::mousePressEvent(QMouseEvent *event) /*override*/ {
 	if (event->button() == Qt::LeftButton) {
 		m_DragStart = event->pos();
-	} else if (!m_isSource && event->button() == Qt::RightButton) {
+	} else if (!m_isSource && m_State != State::Empty && event->button() == Qt::RightButton) {
 		actionWithItem();
 	}
 	QWidget::mousePressEvent(event);
@@ -74,6 +81,7 @@ void InventoryCell::actionWithItem() {
 				drag->exec(Qt::MoveAction);
 				clearCell();
 				m_Number = 0;
+				m_State = State::Empty;
 			}
 		}
 	}
@@ -102,6 +110,7 @@ void InventoryCell::actionWithItem() {
 			m_Content = tempItem;
 			m_Number += tempNumber;
 			view();
+			m_State = State::Fill;
 		} else {
 			m_Number += tempNumber;
 			updateNumberText();
@@ -115,6 +124,10 @@ int InventoryCell::number() const {
 
 Item* InventoryCell::content() const {
 	return m_Content;
+}
+
+InventoryCell::State InventoryCell::state() const {
+	return m_State;
 }
 
 int InventoryCell::col() const {
