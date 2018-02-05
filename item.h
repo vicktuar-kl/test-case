@@ -17,8 +17,9 @@ private:
 	void createFormInterior();	// фиксация размером виджета (иконки)
 
 public:
-	explicit Item(QString type, QWidget *parent = nullptr);	// Создаём объект, по его типу выбирается иконка и звук для действия
-	Item(QString type, QString iconPath, QString soundPath, QWidget* parent = nullptr);
+	explicit Item(const QString& type, QWidget *parent = nullptr);	// Создаём объект, по его типу выбирается иконка и звук для действия
+	Item(const QString& type, const QString& iconPath,
+		 const QString& soundPath, QWidget* parent = nullptr);
 
 	QString iconPath() const;
 	QString soundPath() const;

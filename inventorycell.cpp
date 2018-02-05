@@ -44,7 +44,6 @@ void InventoryCell::actionWithItem() {
 	updateNumberText();
 	if (m_Number == 0) {
 		clearCell();
-		m_State = State::Empty;
 	}
 }
 
@@ -81,7 +80,6 @@ void InventoryCell::actionWithItem() {
 				drag->exec(Qt::MoveAction);
 				clearCell();
 				m_Number = 0;
-				m_State = State::Empty;
 			}
 		}
 	}
@@ -153,10 +151,11 @@ void InventoryCell::view() {
 
 // "Опустошение" ячейки от её содержимого и очистка компоновки
 void InventoryCell::clearCell() {
-	delete m_NumberText;
-	delete m_Content;
+	m_NumberText->clear();
+	m_Content->clear();
 	delete layout();
 	m_Number = 0;
+	m_State = State::Empty;
 }
 
 // Обновление виджета отображения количества элементов

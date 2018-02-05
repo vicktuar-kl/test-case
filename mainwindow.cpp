@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent/* = nullptr*/)
 	m_MainMenu = new MainMenu(this);
     m_Inventory = new Inventory;
 	m_Source = new InventoryCell(true);
-	m_ButtonMainMenu = new QPushButton("Main Menu");
+	m_ButtonMainMenu = new QPushButton("Главное меню");
 	m_ButtonMainMenu->setMaximumWidth(400);
 
 	connect(m_ButtonMainMenu, SIGNAL(clicked()), m_MainMenu, SLOT(show()));

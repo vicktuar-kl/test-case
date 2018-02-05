@@ -25,12 +25,14 @@ Inventory::Inventory(int size/* = 3*/, QWidget *parent/* = nullptr*/)
 	}
 }
 
+// очистка БД и запись новой информации о ячейках
+// и их содержимом в таблцу inventory
 Inventory::~Inventory() {
 	Database::clearInventoryTable();
 	foreach (InventoryCell* temp, m_Cells) {
 		if (temp->state() != InventoryCell::State::Empty) {
-			QString type = temp->content()->type();
-			Database::inventoryInsert(temp->row(), temp->col(), /*type,*/ temp->number());
+			Database::inventoryInsert(temp->row(), temp->col(),
+									  temp->content()->type(), temp->number());
 		}
 	}
 }

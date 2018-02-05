@@ -4,7 +4,7 @@
 // создание виджета и связывание сигналов кнопок со слотами
 MainMenu::MainMenu(QWidget* parent/* = nullptr*/)
 	: QWidget(parent) {
-	m_NewGame = new QPushButton("Новая игры");
+	m_NewGame = new QPushButton("Новая игра");
 	m_Exit = new QPushButton("Выход");
 	m_NewGame->setMinimumWidth(400);
     m_Exit->setMinimumWidth(400);
