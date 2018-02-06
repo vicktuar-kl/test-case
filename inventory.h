@@ -4,27 +4,23 @@
 #include "item.h"
 #include "inventorycell.h"
 
+// ============================================================================
+// Класс инвентаря, содержит виджеты ячеек InventoryCell
+
 class Inventory : public QTableWidget {
     Q_OBJECT
-private:
-	int m_Size;
-	QVector<InventoryCell*> m_Cells;
-
-    void createFormInterior();
-
-protected:
-//	virtual void dragEnterEvent(QDragEnterEvent* event) override;
-//	virtual void dropEvent(QDropEvent* event) override;
 
 public:
 	explicit Inventory(int size = 3, QWidget* parent = nullptr);
 
-	int size() const;
+	virtual ~Inventory();
 
-	friend class InventoryCell;
+private:
+	int m_Size;		// размер инвентаря, инвентарь квадратный
+	QVector<InventoryCell*> m_Cells;
 
-signals:
+	void createFormInterior();	// Настройка внешнего вида виджета
 
 private slots:
-	void selectCellSlot(int row, int col);
+	void selectCellSlot(int row, int col);	// слот, выделяющий ячейку
 };

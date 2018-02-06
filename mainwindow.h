@@ -6,21 +6,24 @@
 #include "inventory.h"
 #include "inventorycell.h"
 
+// ============================================================================
+// Класс для компоновки всех виджетов, главное окно
+
 class MainWindow : public QWidget {
     Q_OBJECT
 private:
-	MainMenu* m_MainMenu;
-	Inventory* m_Inventory;
-	InventoryCell* m_Source;
-	QPushButton* m_ButtonMainMenu;
+	MainMenu* m_MainMenu;			// Виджет главного меню
+	Inventory* m_Inventory;			// таблица инвентаря
+	InventoryCell* m_Source;		// источник предметов
+	QPushButton* m_ButtonMainMenu;	// кнопка вызова главног меню
 
-    void createFormInterior();
+	void createFormInterior();		// компоновка виджетов
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	MainWindow(QWidget *parent = 0);	// связывание сигнала clicked кнопки со слотами вызова главного меню и блокировки виджетов
 
 public slots:
+	// слоты для блокировки/разблокировки всех виджетов главного окна
 	void disable();
 	void enable();
 };

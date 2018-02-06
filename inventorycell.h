@@ -3,48 +3,55 @@
 #include <QWidget>
 #include "item.h"
 
+// ============================================================================
+// Класс ячейки инвентаря, в котором реализован функционал Drag'n'Drop
+
 class InventoryCell : public QWidget {
-	Q_OBJECT
-private:
-	int m_Row;
-	int m_Col;
-	int m_Number;
+	Q_OBJECT	
+public:
+	enum class State { Empty, Fill };
+	explicit InventoryCell(bool isSource = true, QWidget* parent = nullptr);	// конструктор по-умолчанию, вечный генератор яблок
+	InventoryCell(int row, int col, int number,						// конструктор для создания заполненной ячейки
+						   Item* item, bool isSource = false,
+						   QWidget* parent = nullptr);
+	InventoryCell(int row, int col, QWidget* parent = nullptr);		// для заполнения инвентаря пустыми ячейками
 
-	bool m_isSource;
+	void view();						// компоновка виджета предмета и виджета отображения количества предметов
 
-	Item* m_Content;
-	QLabel* m_NumberText;
-
-	QPoint m_DragStart;
-
-	void updateNumberText();
-	void clearCell();
+	int row() const;
+	int col() const;
+	int number() const;
+	Item* content() const;
+	State state() const;
 
 protected:
 	// drag
-	virtual void mouseMoveEvent(QMouseEvent* event) override;
-	virtual void mousePressEvent(QMouseEvent* event) override;
+	virtual void mouseMoveEvent(QMouseEvent* event) override;		// обработка перетаскивания предмета из ячейки
+	virtual void mousePressEvent(QMouseEvent* event) override;		// на зажатие левой кнопки - вычисление позиции m_DragStart, на правую - действия с предметом (поедание яблок)
 
 	// drop
-	virtual void dragEnterEvent(QDragEnterEvent* event) override;
-	virtual void dropEvent(QDropEvent* event) override;
+	virtual void dragEnterEvent(QDragEnterEvent* event) override;	// При входе в зону сброса предмета, проверяем mime-type
+	virtual void dropEvent(QDropEvent* event) override;				// "Принятие" предмета ячейкой и его отображение вместе с количеством
 
-public:
-	explicit InventoryCell(bool isSource = false, QWidget* parent = nullptr);
-	explicit InventoryCell(int row, int col, int number,
-						   Item* item, bool isSource = false,
-						   QWidget* parent = nullptr);
-	explicit InventoryCell(int row, int col, QWidget* parent = nullptr);
+private:
+	int m_Row;
+	int m_Col;
+	int m_Number;				// количество предметов в ячейке
 
-	void view();
-	void setNumber(int number);
-	int number() const;
-	Item* content() const;
-	void setContent(Item* content);
+	bool m_isSource;			// является ли ячейка бесконечным "источником" предметов
 
-signals:
-	void selectInvCellSignal(int row, int col);
+	Item* m_Content;			// содержимое ячейки
+	QLabel* m_NumberText;		// Надпись для отображения количества предметов
+
+	State m_State;
+
+	QSoundEffect m_SoundEffect;	// звуковой эффект для действия с предметом в инвентаре
+
+	QPoint m_DragStart;			// Координаты начала перетаскивания предмета
+
+	void updateNumberText();	// Обновление виджета отображения количества элементов
+	void clearCell();			// "Опустошение" ячейки от её содержимого и очистка компоновки
 
 public slots:
-	void actionWithItem();
+	void actionWithItem();				// слот для совершения действия над предметом в ячейке
 };

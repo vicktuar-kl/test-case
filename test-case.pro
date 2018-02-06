@@ -27,18 +27,18 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     inventory.cpp \
-    database.cpp \
     item.cpp \
     mainmenu.cpp \
-    inventorycell.cpp
+    inventorycell.cpp \
+    database.cpp
 
 HEADERS += \
         mainwindow.h \
     inventory.h \
-    database.h \
     item.h \
     mainmenu.h \
-    inventorycell.h
+    inventorycell.h \
+    database.h
 
 RESOURCES += \
     resources.qrc
