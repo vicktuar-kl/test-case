@@ -6,9 +6,6 @@
 // Настройка вннешего вида инвентаря и заполнение его виджетами ячеек
 Inventory::Inventory(int size/* = 3*/, QWidget *parent/* = nullptr*/)
 	: QTableWidget(parent), m_Size(size) {
-	setMouseTracking(true);
-	connect(this, SIGNAL(cellEntered(int,int)), this, SLOT(selectCellSlot(int,int)));
-
     createFormInterior();
 
 	for (int i = 0; i < m_Size; ++i) {
@@ -67,9 +64,4 @@ void Inventory::createFormInterior() {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	setSelectionMode(QAbstractItemView::SingleSelection);
-}
-
-// слот, выделяющий ячейку
-void Inventory::selectCellSlot(int row, int col)	{
-	setCurrentCell(row, col);
 }

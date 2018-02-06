@@ -20,7 +20,4 @@ private:
 	QVector<InventoryCell*> m_Cells;
 
 	void createFormInterior();	// Настройка внешнего вида виджета
-
-private slots:
-	void selectCellSlot(int row, int col);	// слот, выделяющий ячейку
 };

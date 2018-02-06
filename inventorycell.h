@@ -24,6 +24,9 @@ public:
 	Item* content() const;
 	State state() const;
 
+	friend QDataStream& operator<<(QDataStream& stream, const InventoryCell& cell);
+	friend QDataStream& operator>>(QDataStream& stream, InventoryCell& cell);
+
 protected:
 	// drag
 	virtual void mouseMoveEvent(QMouseEvent* event) override;		// обработка перетаскивания предмета из ячейки

@@ -6,7 +6,6 @@
 // связывание сигнала clicked кнопки со слотами вызова главного меню и блокировки виджетов
 MainWindow::MainWindow(QWidget *parent/* = nullptr*/)
     : QWidget(parent) {
-	showFullScreen();
 	m_MainMenu = new MainMenu(this);
     m_Inventory = new Inventory;
 	m_Source = new InventoryCell(true);

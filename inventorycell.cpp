@@ -49,37 +49,36 @@ void InventoryCell::actionWithItem() {
 
 // на зажатие левой кнопки - вычисление позиции m_DragStart, на правую - действия с предметом (поедание яблок)
 /*virtual*/ void InventoryCell::mousePressEvent(QMouseEvent *event) /*override*/ {
-	if (event->button() == Qt::LeftButton) {
-		m_DragStart = event->pos();
-	} else if (!m_isSource && m_State != State::Empty && event->button() == Qt::RightButton) {
-		actionWithItem();
+	if (m_State != State::Empty) {
+		if (event->button() == Qt::LeftButton) {
+			m_DragStart = event->pos();
+		} else if (!m_isSource && event->button() == Qt::RightButton) {
+			actionWithItem();
+		}
 	}
 	QWidget::mousePressEvent(event);
 }
 
 // обработка перетаскивания предмета из ячейки, из источника - копируем, из обычной ячейки - переносим
 /*virtual*/ void InventoryCell::mouseMoveEvent(QMouseEvent *event) /*override*/ {
-	if (event->buttons() & Qt::LeftButton) {
+	if (m_State != State::Empty && event->buttons() & Qt::LeftButton) {
 		int distance = (event->pos() - m_DragStart).manhattanLength();
 		if (distance > QApplication::startDragDistance()) {
 			QByteArray data;
 			QDataStream dataStream(&data, QIODevice::WriteOnly);
 			QMimeData* mimeData = new QMimeData;
 
-			dataStream << m_Content->type() << m_Number;
+			dataStream << *this;
 			mimeData->setData(m_Content->mimeType(), data);
 
 			QDrag* drag = new QDrag(this);
 			drag->setMimeData((mimeData));
 			drag->setPixmap(*(m_Content->pixmap()));
 
-
 			if (m_isSource)
 				drag->exec(Qt::CopyAction);
 			else {
 				drag->exec(Qt::MoveAction);
-				clearCell();
-				m_Number = 0;
 			}
 		}
 	}
@@ -96,46 +95,31 @@ void InventoryCell::actionWithItem() {
 // "Принятие" предмета ячейкой и его отображение вместе с количеством
 /*virtual*/ void InventoryCell::dropEvent(QDropEvent* event) /*override*/ {
 	if (event->mimeData()->hasFormat(Item::mimeType())) {
+		InventoryCell* source =
+				dynamic_cast<InventoryCell*>(event->source());
+		if (source == this) {
+			return;
+		}
 		QByteArray data = event->mimeData()->data(Item::mimeType());
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
 
-		QString type;
-		int tempNumber;
-		dataStream >> type >> tempNumber;
-		Item* tempItem = new Item(type);
+		InventoryCell tempCell;
+		dataStream >> tempCell;
 
+
+		if (source->m_isSource == false)
+			source->clearCell();
 		if (m_Number == 0) {
-			m_Content = tempItem;
-			m_Number += tempNumber;
+			m_Content = tempCell.m_Content;
+			m_Number += tempCell.m_Number;
 			view();
 			m_State = State::Fill;
 		} else {
-			m_Number += tempNumber;
+			m_Number += tempCell.m_Number;
 			updateNumberText();
 		}
 	}
 }
-
-int InventoryCell::number() const {
-	return m_Number;
-}
-
-Item* InventoryCell::content() const {
-	return m_Content;
-}
-
-InventoryCell::State InventoryCell::state() const {
-	return m_State;
-}
-
-int InventoryCell::col() const {
-	return m_Col;
-}
-
-int InventoryCell::row() const {
-	return m_Row;
-}
-
 
 // компоновка виджета предмета и виджета отображения количества предметов, для источника нет надписи с количеством
 void InventoryCell::view() {
@@ -161,4 +145,34 @@ void InventoryCell::clearCell() {
 // Обновление виджета отображения количества элементов
 void InventoryCell::updateNumberText() {
 	m_NumberText->setText(QString::number(m_Number));
+}
+
+QDataStream& operator<<(QDataStream& stream, const InventoryCell& cell) {
+	stream << cell.m_Row << cell.m_Col << cell.m_Number << cell.m_Content << cell.m_isSource;
+	return stream;
+}
+
+QDataStream& operator>>(QDataStream& stream, InventoryCell& cell) {
+	stream >> cell.m_Row >> cell.m_Col >> cell.m_Number >> *(cell.m_Content) >> cell.m_isSource;
+	return stream;
+}
+
+int InventoryCell::number() const {
+	return m_Number;
+}
+
+Item* InventoryCell::content() const {
+	return m_Content;
+}
+
+InventoryCell::State InventoryCell::state() const {
+	return m_State;
+}
+
+int InventoryCell::col() const {
+	return m_Col;
+}
+
+int InventoryCell::row() const {
+	return m_Row;
 }

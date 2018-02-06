@@ -2,6 +2,9 @@
 #include "item.h"
 #include "inventorycell.h"
 
+Item::Item(QWidget *parent /*= nullptr*/)
+	: QLabel(parent), m_Type(""), m_IconPath(""), m_SoundPath("") { }
+
 // Создаём объект, по его типу выбирается иконка и звук для действия
 // пока только яблоки :(
 Item::Item(const QString& type, QWidget* parent/* = nullptr*/)
@@ -42,4 +45,14 @@ QString Item::type() {
 // статический метод класса для mime-типа этого класса (нужно для Drag'n'Drop)
 QString Item::mimeType() {
 	return "application/x-item";
+}
+
+QDataStream& operator<<(QDataStream& stream, const Item& item) {
+	stream << item.m_Type << item.m_IconPath << item.m_SoundPath;
+	return stream;
+}
+
+QDataStream& operator>>(QDataStream& stream, Item& item) {
+	stream >> item.m_Type >> item.m_IconPath >> item.m_SoundPath;
+	return stream;
 }
